@@ -207,7 +207,8 @@ var server = server.listen(process.env.PORT || 3000, function () {
 });
 //base de datos
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/testeotoni');
+//mongoose.connect('mongodb://localhost/testeotoni');
+mongoose.connect('mongodb://dbconf3d:ncQu6YtaSnX4wmeuCAOnnavXXMvt4AcuQIsxnujpkqwefToMabakKXuBWZtS2CRfMYaZ7irneUTZPpoXzSNDrg==@dbconf3d.documents.azure.com:10255/?ssl=true');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
