@@ -58,7 +58,6 @@
     padding: 4%; /* equals 100% when doubled and added to the max-width */
 
 }
-ul.nav{margin-bottom:0!important;}
    </style>
    		<!--Jquery&Bootsrap&Choosen-->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -69,6 +68,7 @@ ul.nav{margin-bottom:0!important;}
     	<script src="lib/Oimo.js"></script>
 		<script src="lib/babylon.js"></script>
 		<script src="lib/cannon.js"></script>
+		<!--<script src="js/vendor/jquery.min.js"></script>-->
 							<!--socketio-->
         <script src="/socket.io/socket.io.js"></script>
 </head>
@@ -165,7 +165,7 @@ ul.nav{margin-bottom:0!important;}
 								<label for="recipient-name" class="form-control-label">PROJECT NAME</label>
 								<input type="text" class="form-control" id="idProjectnamecreate">
 							</div>
-							<button type="button" class="btn btn-default" data-dismiss="modal" id="idCreate">CREATE</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="idCreate" href="#">CREATE</button>
 				</div> 
 				<div class="tab-pane" id="SAVEPROJECT">
 								<p></p>
@@ -1212,17 +1212,7 @@ ul.nav{margin-bottom:0!important;}
 	   </div>
 	   </div>
     </div>
-  </div>
 </div>
-       <!--Left and right controls 
-      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a> -->
  <!-- BABYLON & CHAT SOCKETIO-->
 <div class="container"> 
  <div class="row"> 
@@ -1246,8 +1236,13 @@ ul.nav{margin-bottom:0!important;}
 	<div class="panel-body">
 	        <div class="row">
             <div class="col-xs-6">
-				<button type="button" class="btn btn-default" id="projectprice">INVEST</button>
-                <div id="projectpanelprice"></div>
+				<!--<button type="button" class="btn btn-default" id="projectprice">INVEST</button>
+                <div id="projectpanelprice"></div>-->
+				    <!--<a id="projectprice">INVEST</a>
+                    <p id="projectpanelprice">-->
+					<button data-toggle="collapse" data-target="#projectpanelprice" id="projectprice" href="#">INVEST</button>
+						<div id="projectpanelprice" class="collapse">
+						</div>
 			</div> 
 			<div class="col-xs-6">
 			<button type="button" class="btn btn-default" id="projectcycletime">CT</button>
@@ -1327,21 +1322,21 @@ $(document).ready(function() {
      $('#myTabFlexSpot').show();
      $('#myTabPAS').hide();
 	 $("#idLoad").hide();
-	 $("#idCreate").hide();
+	 <!--$("#idCreate").hide();-->
 	 $("#idEnter").hide();
 	 <!--$("#myModal").modal({backdrop: "static"});-->
 	 $("#myModalpassword").modal({backdrop: "static"});
 	<!-- $('#myModal').modal('hide');-->
 	 $('#myModalpassword').modal('show');
 	 $('#savetab_button').attr('class','hide');
-	 $("#projectpanelprice").hide();
 	 $("#projectpanelcycletime").hide();
-     $("#projectprice").click(function(e){
-        $("#projectpanelprice").slideToggle("fast");
-		e.preventDefault();
-    });
+	 	// $("#projectpanelprice").hide();
+     //$("#projectprice").click(function(e){
+        //$("#projectpanelprice").slideToggle("fast");
+		//e.preventDefault();
+    //});
     $("#projectcycletime").click(function(e){
-        $("#projectpanelcycletime").slideToggle("fast");
+        $("#projectpanelcycletime").slideToggle("fast")
 		e.preventDefault();
     });
 });
@@ -2714,7 +2709,7 @@ var element5 = scene.getMeshByID("FS_PLATTRIPLE2");
     $("#idBusinessunitcreate").button().click(function(){
       var businesselection2=$Businessunitcreate.val();
 		if	(businesselection2=="FLEXSPOT" || businesselection2=="PAS"){
-		$("#idCreate").show();
+		//$("#idCreate").show();
          }	
     });
 	  $("#idValidate").button().click(function(){
@@ -2724,36 +2719,33 @@ var element5 = scene.getMeshByID("FS_PLATTRIPLE2");
          }	
     });
 $('#myModal').on('hide.bs.modal show.bs.modal', function(event){
-  var $activeElement = $(document.activeElement);
-  if ($activeElement.is('[data-toggle], [data-dismiss]')){
+ //var $activeElement= document.querySelector(':focus');
       if (event.type === 'show'){
 	       console.debug('modal shown!');
-      }
-	   
-    if (event.type === 'hide'){
-	 console.debug('modal hide!');
-	       if ( $activeElement.attr('id') === 'idSave'){
-		                 var jsFile = BABYLON.SceneSerializer.Serialize(scene);
+      } 
+});
+$('#myModal .tab-pane button').on('click', function (e) {
+    var $target = $(e.target);
+    $(this).closest('.modal').on('hidden.bs.modal', function (e) {
+        //alert('The buttons id that closed the modal is: #' + $target[0].id);
+		var killerbutton=$target[0].id;
+		 if ( killerbutton === 'idSave'){
+		  var jsFile = BABYLON.SceneSerializer.Serialize(scene);
 	                     var jsfinal = JSON.stringify(jsFile);
 						 var unitnavbar=document.getElementById("navbarText");
 				         socket.emit('Saveproject',{ name: $Projectnamenew.val(),businessunit:unitnavbar.textContent,scenebabylon:jsfinal});
-						 
-		   }
-		   else if ( $activeElement.attr('id') === 'idLoad'){
-		   		         console.log('The button that closed the modal is: ',$activeElement.attr('id'));
-						<!-- socket.emit('Loadproject',{ name: $Businessunitload.val()+$Projectnameload.val()});-->
-						socket.emit('Loadproject',{ name: businesselection+$Projectnameload.val()});
-		              						 
-		   }
-		   else if ( $activeElement.attr('id') === 'idCreate'){
-		                  var jsFile = BABYLON.SceneSerializer.Serialize(scene);
-	                      var jsfinal = JSON.stringify(jsFile);
-		   		          console.log('The button that closed the modal is: ', $activeElement.attr('id'));
+		 }
+		 if ( killerbutton === 'idLoad'){
+		      console.log('The button that closed the modal is: '+ killerbutton);
+						socket.emit('Loadproject',{ name: businesselection+$Projectnameload.val()});   
+		 }
+		 if ( killerbutton === 'idCreate'){
+		  var jsFile = BABYLON.SceneSerializer.Serialize(scene);
+	                     var jsfinal = JSON.stringify(jsFile);
+		   		          console.log('The button that closed the modal is: '+ killerbutton);
                           socket.emit('Createproject',{ name: $Projectnamecreate.val(),businessunit:$Businessunitcreate.val(),scenebabylon:jsfinal});
-                          						  
-		   }
-    }
-  }
+		 }
+    });
 });
 socket.on('loadscene',function(data){
 		folonscene=false;
