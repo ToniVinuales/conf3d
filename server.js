@@ -62,10 +62,10 @@ io.sockets.on('connection',function(socket){
 });	
 });	
     socket.on('Createproject',function(data) {
-       var projectsavename =data.businessunit+data.name;
-       var businesssaveunitname = data.businessunit;
-	   var scenesavedb=data.scenebabylon;  
-       NewLayout.count({_id: projectsavename}, function (err, count){ 
+        var projectsavename =data.businessunit+data.name;
+        var businesssaveunitname = data.businessunit;
+	    var scenesavedb=data.scenebabylon;  
+        NewLayout.count({_id: projectsavename}, function (err, count){ 
               if(count>0){
                 //message: NOT POSSIBLE.PROJECT ALREADY CREATED!
               }else{	
@@ -78,9 +78,9 @@ io.sockets.on('connection',function(socket){
         }else {
 		var dbLayout=docs.projectScene;
 		var newProject=new NewLayout({_id:projectsavename ,projectUnit:businesssaveunitname,projectScene:dbLayout});
-		              newProject.save(function(err){
-			            if (err) throw err;
-				       });
+		             // newProject.save(function(err){
+			         //   if (err) throw err;
+				     //  });
         socket.emit('loadscene',{namescene:projectsavename,nameunit:businesssaveunitname,namelayout:dbLayout});
         }
      });
@@ -207,8 +207,8 @@ var server = server.listen(process.env.PORT || 3000, function () {
 });
 //base de datos
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://localhost/testeotoni');
-mongoose.connect('mongodb://dbconf3d:ncQu6YtaSnX4wmeuCAOnnavXXMvt4AcuQIsxnujpkqwefToMabakKXuBWZtS2CRfMYaZ7irneUTZPpoXzSNDrg==@dbconf3d.documents.azure.com:10255/?ssl=true');
+mongoose.connect('mongodb://localhost/testeotoni');
+//mongoose.connect('mongodb://dbconf3d:ncQu6YtaSnX4wmeuCAOnnavXXMvt4AcuQIsxnujpkqwefToMabakKXuBWZtS2CRfMYaZ7irneUTZPpoXzSNDrg==@dbconf3d.documents.azure.com:10255/?ssl=true');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
